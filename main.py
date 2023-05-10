@@ -1,47 +1,50 @@
 import tkinter as tk
 from tkinter import messagebox
 
-
-def calculate_bmi():
-    # get user inputs from entry fields
-    weight = weight_entry.get()
-    height = height_entry.get()
-    # calculate the BMI
-    bmi = (float(weight) / (float(height)/100)**2)
-
-    # display the result in a message box
-    if bmi < 18.5:
-        result = f"Your BMI is {bmi:.1f}\nYou are underweight"
-    elif bmi < 25:
-        result = f"Your BMI is {bmi:.1f}\nYou are normal"
-    elif bmi < 30:
-        result = f"Your BMI is {bmi:.1f}\nYou are overweight"
-    elif bmi < 35:
-        result = f"Your BMI is {bmi:.1f}\nYou are obese"
-    else:
-        result = f"Your BMI is {bmi:.1f}\nYou are extremely obese"
-    
-    messagebox.showinfo("BMI Calculator", result)
-
-# create the main window
 root = tk.Tk()
 root.title("BMI Calculator")
+calc_method = tk.StringVar(value="metric")
 
-# create labels and entry fields for weight and height
-weight_label = tk.Label(root, text="Weight (kg):")
+
+weight_label = tk.Label(root, text="Weight:")
+weight_label.pack()
 weight_entry = tk.Entry(root)
-height_label = tk.Label(root, text="Height (cm):")
+weight_entry.pack()
+height_label = tk.Label(root, text="Height:")
+height_label.pack()
 height_entry = tk.Entry(root)
+height_entry.pack()
 
-# create a button to calculate the BMI
+
+def switch_units():
+    global calc_method
+    if calc_method.get() == "metric":
+        calc_method.set("imperial")
+        weight_label.config(text="Weight (lbs):")
+        height_label.config(text="Height (in):")
+    else:
+        calc_method.set("metric")
+        weight_label.config(text="Weight (kg):")
+        height_label.config(text="Height (cm):")
+
+unit_button = tk.Button(root, text="Switch Units", command=switch_units)
+unit_button.pack(side="top")
+
+def calculate_bmi():
+    weight = float(weight_entry.get())
+    height = float(height_entry.get())
+    if calc_method.get() == 'metric':
+        bmi = weight / (height/100)**2
+    else:
+        bmi = (weight * 703) / height**2
+    result_label.config(text="BMI: {:.1f}".format(bmi))
+
+
 calculate_button = tk.Button(root, text="Calculate", command=calculate_bmi) 
 
-# place the widgets on the window using grid layout
+calculate_button = tk.Button(root, text="Calculate BMI", command=calculate_bmi)
+calculate_button.pack()
+result_label = tk.Label(root, text="BMI: ")
+result_label.pack()
 
-weight_label.grid(row=0, column=0)
-weight_entry.grid(row=0, column=1)
-height_label.grid(row=1, column=0)
-height_entry.grid(row=1, column=1)
-calculate_button.grid(row=2, column=0, columnspan=2)
-
-root.mainloop()
+root.mainloop() 
