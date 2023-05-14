@@ -6,11 +6,11 @@ root.title("BMI Calculator")
 calc_method = tk.StringVar(value="metric")
 
 
-weight_label = tk.Label(root, text="Weight:")
+weight_label = tk.Label(root, text="Weight in kg: ")
 weight_label.pack()
 weight_entry = tk.Entry(root)
 weight_entry.pack()
-height_label = tk.Label(root, text="Height:")
+height_label = tk.Label(root, text="Height in cm: ")
 height_label.pack()
 height_entry = tk.Entry(root)
 height_entry.pack()
@@ -35,9 +35,16 @@ def calculate_bmi():
     height = float(height_entry.get())
     if calc_method.get() == 'metric':
         bmi = weight / (height/100)**2
+        protien_intake = weight * 0.5
+        fat_intake = weight * 0.5
+        total_protien_fat = protien_intake + fat_intake
     else:
         bmi = (weight * 703) / height**2
+        protien_intake = weight * 2
+        fat_intake = weight * 0.88
+        total_protien_fat = protien_intake + fat_intake
     result_label.config(text="BMI: {:.1f}".format(bmi))
+
 
 
 calculate_button = tk.Button(root, text="Calculate", command=calculate_bmi) 
